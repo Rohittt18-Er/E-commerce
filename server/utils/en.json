@@ -1,0 +1,12 @@
+{
+    "//------//--------":"below mesage is API response comment ",
+    "SUCCESS": "Response returned successfully",
+    "NETWORKERROR":"Something went wrong",
+    "NODATAFOUND":"Data not found",
+    "EMPTYTOKEN":"Token not found",
+    "TOKENEXPIRE":"Token has been expire",
+    "ERROR_EMAIL_NOT_REGISTERED":"Email not register Yet please register",
+    "ERROR_INVALID_EMAIL_PWD":"Credential not match",
+    "BAD_REQUEST":"please enter valid request data",
+    "NOT_ACCEPTABLE":"data already found"
+}
