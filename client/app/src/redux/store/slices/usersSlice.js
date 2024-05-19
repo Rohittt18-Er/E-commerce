@@ -5,7 +5,7 @@ const usersSlice = createSlice({
   name: "users",
   initialState: {
     isLoading: false,
-    data: [],
+    usersData: [],
     error: null,
   },
   extraReducers(builder) {
@@ -14,7 +14,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(fetchUsers.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = action.payload;
+      state.usersData = action.payload;
     });
     builder.addCase(fetchUsers.rejected, (state, action) => {
       state.isLoading = false;
@@ -26,7 +26,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(addUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data.push(action.payload);
+      state.usersData.push(action.payload);
     });
     builder.addCase(addUser.rejected, (state, action) => {
       state.isLoading = false;
@@ -38,9 +38,6 @@ const usersSlice = createSlice({
     });
     builder.addCase(removeUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = state.data.filter((user) => {
-        return user.id !== action.payload.id;
-      });
     });
     builder.addCase(removeUser.rejected, (state, action) => {
       state.isLoading = false;

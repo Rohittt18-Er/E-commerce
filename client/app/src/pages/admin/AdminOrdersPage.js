@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Container,
   Row,
@@ -8,14 +9,20 @@ import {
   Button,
 } from "react-bootstrap";
 import CartItemComponent from "../../components/cartItem/CartItemComponent";
+import AdminLinksComponent from "../../components/admin/AdminLinksComponent";
+import { StyledEngineProvider } from "@mui/material/styles";
 
 const AdminOrderDetailsPage = () => {
   return (
     <Container fluid>
       <Row className="mt-4">
-        <h1>Order Details</h1>
-        <Col md={8}>
-          <br />
+        <Col md={3} lg={2}>
+          <StyledEngineProvider injectFirst>
+            <AdminLinksComponent />
+          </StyledEngineProvider>
+        </Col>
+        <Col md={9} lg={10}>
+          <h1>Order Details</h1>
           <Row>
             <Col md={6}>
               <h2>Shipping</h2>
@@ -32,18 +39,18 @@ const AdminOrderDetailsPage = () => {
                 </option>
               </Form.Select>
             </Col>
-            <Row>
-              <Col>
-                <Alert className="mt-3" variant="danger">
-                  Not delivered
-                </Alert>
-              </Col>
-              <Col>
-                <Alert className="mt-3" variant="success">
-                  Paid on 2022-10-02
-                </Alert>
-              </Col>
-            </Row>
+          </Row>
+          <Row>
+            <Col md={6}>
+              <Alert className="mt-3" variant="danger">
+                Not delivered
+              </Alert>
+            </Col>
+            <Col md={6}>
+              <Alert className="mt-3" variant="success">
+                Paid on 2022-10-02
+              </Alert>
+            </Col>
           </Row>
           <br />
           <h2>Order items</h2>
@@ -53,7 +60,7 @@ const AdminOrderDetailsPage = () => {
             ))}
           </ListGroup>
         </Col>
-        <Col md={4}>
+        <Col className="mx-auto"  md={6} lg={6}  >
           <ListGroup>
             <ListGroup.Item>
               <h3>Order summary</h3>
@@ -72,7 +79,15 @@ const AdminOrderDetailsPage = () => {
             </ListGroup.Item>
             <ListGroup.Item>
               <div className="d-grid gap-2">
-                <Button size="lg" variant="danger" type="button">
+                <Button
+                  size="lg"
+                  variant="danger"
+                  type="button"
+                  onClick={() => {
+
+                    console.log("Mark as delivered clicked");
+                  }}
+                >
                   Mark as delivered
                 </Button>
               </div>
@@ -85,4 +100,3 @@ const AdminOrderDetailsPage = () => {
 };
 
 export default AdminOrderDetailsPage;
-

@@ -10,7 +10,6 @@ import Container from "@mui/material/Container";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useForm } from "react-hook-form";
 import Stack from "@mui/material/Stack";
-import Slide from "@mui/material/Slide";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from "../utils/Loader";
@@ -42,7 +41,7 @@ export default function Register() {
       toast.success(response.data.message);
       navigate("/login");
     } catch (error) {
-      toast.error(error.message);
+      toast.error("User Already exist");
     } finally {
       setLoading(false);
     }
@@ -54,7 +53,7 @@ export default function Register() {
         style={{
           backgroundImage: `url(${bgimg})`,
           backgroundSize: "cover",
-          minHeight: "100vh",
+          minHeight: "90vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -68,7 +67,7 @@ export default function Register() {
                 style={{
                   backgroundImage: `url(${bg})`,
                   backgroundSize: "cover",
-                  height: "63vh",
+                  height: "55vh",
                   marginTop: "40px",
                   borderRadius: "8px",
                 }}
@@ -157,7 +156,7 @@ export default function Register() {
                         size="large"
                         sx={{ mt: 2, borderRadius: "28px", bgcolor: "#FF9A01" }}
                       >
-                        {loading ? <Loader /> : " Sign in"}
+                        {loading ? <Loader /> : " Sign Up"}
                       </Button>
                       <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
                         <Typography variant="body1" sx={{ mt: 1 }}>

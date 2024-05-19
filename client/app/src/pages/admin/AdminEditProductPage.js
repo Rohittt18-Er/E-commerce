@@ -7,30 +7,96 @@ import {
   CloseButton,
   Table,
   Alert,
-  Image
+  Image,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-
+import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useThunk } from "../../hooks/use-thunk";
+import { fetchSingleProduct } from "../../redux/store";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { removeSingleProductData } from "../../redux/store/slices/productSlice";
+import Loader from "../../utils/Loader";
+import Autocomplete from "@mui/material/Autocomplete";
 const onHover = {
-    cursor: "pointer",
-    position: "absolute",
-    left: "5px",
-    top: "-10px",
-    transform: "scale(2.7)",
-}
+  cursor: "pointer",
+  position: "absolute",
+  left: "5px",
+  top: "-10px",
+  transform: "scale(2.7)",
+};
 
 const AdminEditProductPage = () => {
+  const dispatch = useDispatch();
+  const state = useLocation();
+  const id = state?.state?.id;
+
+  const [proData, proLoading, prErr, PSucees, pErrFlag] =
+    useThunk(fetchSingleProduct);
   const [validated, setValidated] = useState(false);
+  const data = useSelector((state) => state?.product?.singleProductData?.data);
+  useEffect(() => {
+    dispatch(removeSingleProductData());
+    proData(id);
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        name: data.name || "",
+        description: data.description || "",
+        count: data.count || "",
+        price: data.price || "",
+        category: "",
+        attributesTable: [],
+        key: "",
+        newKey: "",
+        newValue: "",
+        value: [],
+      });
+    }
+  }, [data]);
+
+  console.log(data);
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
-
     setValidated(true);
   };
+
+  const [formData, setFormData] = useState({
+    name: data?.name,
+    description: data?.description,
+    count: data?.count,
+    price: data?.price,
+    category: data.category,
+    attributesTable: [],
+    key: "",
+    newKey: "",
+    newValue: "",
+    value: [],
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleCategoryChange = (event, value) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      category: value,
+    }));
+  };
+
+  console.log("formData", formData);
+
   return (
     <Container>
       <Row className="justify-content-md-center mt-5">
@@ -42,10 +108,14 @@ const AdminEditProductPage = () => {
         <Col md={6}>
           <h1>Edit product</h1>
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control name="name" required type="text" defaultValue="Panasonic" />
-            </Form.Group>
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              name="name"
+              required
+              type="text"
+              onChange={handleChange}
+              value={formData?.name}
+            />
 
             <Form.Group
               className="mb-3"
@@ -57,34 +127,58 @@ const AdminEditProductPage = () => {
                 required
                 as="textarea"
                 rows={3}
-                defaultValue="Product description"
+                onChange={handleChange}
+                value={formData?.description}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCount">
               <Form.Label>Count in stock</Form.Label>
-              <Form.Control name="count" required type="number" defaultValue="2" />
+              <Form.Control
+                value={formData?.count}
+                name="count"
+                required
+                type="number"
+                onChange={handleChange}
+              />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPrice">
-              <Form.Label>Price</Form.Label>
-              <Form.Control name="price" required type="text" defaultValue="$210" />
+            <Form.Group
+              value={formData?.price}
+              className="mb-3"
+              controlId="formBasicPrice"
+            >
+              <Form.Label>
+                Price
+                {proLoading ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItem: "center",
+                      marginLeft: "300px",
+                    }}
+                  >
+                    <Loader />
+                  </div>
+                ) : null}
+              </Form.Label>
+              <Form.Control
+                value={formData.price}
+                name="price"
+                required
+                type="text"
+                onChange={handleChange}
+              />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicCategory">
-              <Form.Label>
-                Category
-                
-              </Form.Label>
-              <Form.Select
-                required
-                name="category"
-                aria-label="Default select example"
-              >
-                <option value="">Choose category</option>
-                <option value="1">Laptops</option>
-                <option value="2">TV</option>
-                <option value="3">Games</option>
-              </Form.Select>
+              {/* <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={categoryOptions}
+                sx={{ width: 550 }}
+                value={formData.category}
+                onChange={handleCategoryChange}
+                renderInput={(params) => <TextField {...params} />}
+              /> */}
             </Form.Group>
-
 
             <Row className="mt-5">
               <Col md={6}>
@@ -172,17 +266,16 @@ const AdminEditProductPage = () => {
 
             <Form.Group controlId="formFileMultiple" className="mb-3 mt-3">
               <Form.Label>Images</Form.Label>
-                <Row>
-                    <Col style={{position: "relative"}} xs={3}>
-                    <Image src="/images/monitors-category.png" fluid />
-                    <i style={onHover} className="bi bi-x text-danger"></i>
-                    </Col>
-                    <Col style={{position: "relative"}} xs={3}>
-                    <Image src="/images/monitors-category.png" fluid />
-                    <i style={onHover} className="bi bi-x text-danger"></i>
-                    </Col>
-                    
-                </Row>
+              <Row>
+                <Col style={{ position: "relative" }} xs={3}>
+                  <Image src="/images/monitors-category.png" fluid />
+                  <i style={onHover} className="bi bi-x text-danger"></i>
+                </Col>
+                <Col style={{ position: "relative" }} xs={3}>
+                  <Image src="/images/monitors-category.png" fluid />
+                  <i style={onHover} className="bi bi-x text-danger"></i>
+                </Col>
+              </Row>
               <Form.Control required type="file" multiple />
             </Form.Group>
             <Button variant="primary" type="submit">
@@ -196,4 +289,3 @@ const AdminEditProductPage = () => {
 };
 
 export default AdminEditProductPage;
-

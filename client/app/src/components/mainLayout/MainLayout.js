@@ -6,22 +6,29 @@ import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import UserChatPage from "../../pages/user/UserChatPage";
 
-const MainLayout = ({admin}) => {
+const MainLayout = ({ admin }) => {
   return (
-    <Box>
+    <Wrapper>
       <Header />
       <MainDiv md={{ minHeight: "calc(100vh - 140px)" }}>
         <Outlet />
       </MainDiv>
-      {!admin ?<UserChatPage/>:null} 
-      <Footer/>
-    </Box>
+      {!admin ? <UserChatPage /> : null}
+      <Footer />
+    </Wrapper>
   );
 };
 
 export default MainLayout;
 
+const Wrapper = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
+
 const MainDiv = styled(Box)`
-  margin-top:10px;
+  margin-top: 10px;
   min-height: auto;
+  flex-grow: 1;
 `;

@@ -2,19 +2,23 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 import MainLayout from "../components/mainLayout/MainLayout";
+import { useSelector } from "react-redux";
+import { selectIsAdmin, selectIsAuthenticated } from "../redux/store/slices/authSlice";
 
 const PrivateRoutes = ({admin}) => {
+  const isAdminAuth = useSelector(selectIsAdmin)
+  const isUserAuthenticated = useSelector(selectIsAuthenticated)
   // Check if the user is authenticated
 let auth=false
   if(admin){
     // check wheather admin is authenticated
-    let adminAuth=true
+    let adminAuth=isAdminAuth
     if(adminAuth){
       auth=true
     }
   }else{
         // check wheather user is authenticated
-    let userAuth=true
+    let userAuth=isUserAuthenticated
     if(userAuth){
       auth=true
     }
