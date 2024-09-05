@@ -35,7 +35,7 @@ export default function Register() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/user/register`,
+        `https://e-commerce-1-76i4.onrender.com/api/v1/user/register`,
         data
       );
       toast.success(response.data.message);
