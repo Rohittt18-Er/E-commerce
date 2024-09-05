@@ -44,7 +44,7 @@ export default function Login() {
     data.doNotLogout = doNotLogout;
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/v1/user/login`,
+        `https://e-commerce-1-76i4.onrender.com/api/v1/user/login`,
         data
       );
       toast.success(response.data.message);
